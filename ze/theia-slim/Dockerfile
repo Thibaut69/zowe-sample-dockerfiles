@@ -13,11 +13,10 @@ WORKDIR /home/theia
 ADD buildPackageJson.js ./buildPackageJson.js
 ARG THEIA_VERSION=latest
 RUN echo "$(node buildPackageJson.js ${THEIA_VERSION})" > package.json
-ARG GITHUB_TOKEN
 RUN yarn global add node-gyp && \
     yarn --pure-lockfile && \
     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-    yarn theia download:plugins && \
+    yarn theia download:plugins --rate-limit=15 --parallel=false && \
     yarn --production && \
     yarn autoclean --init && \
     echo *.ts >> .yarnclean && \
