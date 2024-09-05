@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-deploy-alpine-basic:
     uses: ./.github/workflows/docker-reusable.yaml
+    permissions:
+      packages: write
     with: 
       name: cli-alpine-basic
       path: cli/alpine-basic
