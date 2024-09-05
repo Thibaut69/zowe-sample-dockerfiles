@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-deploy-basic-with-nvm:
     uses: ./.github/workflows/docker-reusable.yaml
+    permissions:
+      packages: write
     with: 
       name: cli-basic-with-nvm
       path: cli/basic-with-nvm

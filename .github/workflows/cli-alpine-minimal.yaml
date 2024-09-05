@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-deploy-alpine-minimal:
     uses: ./.github/workflows/docker-reusable.yaml
+    permissions:
+      packages: write
     with: 
       name: cli-alpine-minimal
       path: cli/alpine-minimal

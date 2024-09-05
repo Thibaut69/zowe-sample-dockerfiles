@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-deploy-minimal:
     uses: ./.github/workflows/docker-reusable.yaml
+    permissions:
+      packages: write
     with: 
       name: cli-minimal
       path: cli/minimal

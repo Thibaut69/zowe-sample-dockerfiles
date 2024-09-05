@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-deploy-jenkins-agent:
     uses: ./.github/workflows/docker-reusable.yaml
+    permissions:
+      packages: write
     with: 
       name: cli-jenkins-agent
       path: cli/jenkins-agent
