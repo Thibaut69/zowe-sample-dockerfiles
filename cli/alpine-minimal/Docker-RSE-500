@@ -24,7 +24,7 @@ RUN dbus-daemon --system
 RUN dbus-launch --sh-syntax --exit-with-session
 RUN export $(dbus-launch)
 
-# Create starting script
+# Create starting script 
 RUN echo '#!/bin/sh' > /usr/local/bin/start.sh \
     && echo 'export $(dbus-launch)' >> /usr/local/bin/start.sh \
     && echo 'exec "$@"' >> /usr/local/bin/start.sh
