@@ -1,0 +1,34 @@
+FROM alpine:latest
+
+USER root
+ENV http_proxy=your-proxy
+ENV https_proxy=your-proxy
+ENV ZOWE_VERSION=8.9.0
+ENV RSE_VERSION=5.0.0
+
+# Install Node, plugin prereqs
+RUN sed -i 's/https/http/' /etc/apk/repositories
+RUN apk update && apk upgrade && apk add curl doas nodejs npm libsecret dbus gnome-keyring dbus-x11 && rm -rf /var/cache/apk/*
+
+# Install Zowe CLI
+RUN npm config set strict-ssl false
+RUN npm install -g @zowe/cli@$ZOWE_VERSION --ignore-scripts
+RUN zowe plugins install @ibm/rse-api-for-zowe-cli@$RSE_VERSION
+
+# Config profile RSE global
+RUN zowe config init --global-config
+
+# démon DBUS cf https://github.com/zowe/zowe-cli/issues/1139
+RUN mkdir -p /var/run/dbus
+RUN dbus-daemon --system
+RUN dbus-launch --sh-syntax --exit-with-session
+RUN export $(dbus-launch)
+
+# Copier le script de démarrage dans l'image
+COPY start.sh /usr/local/bin/start.sh
+
+# Rendre le script exécutable
+RUN chmod +x /usr/local/bin/start.sh
+
+# Définir le script de démarrage comme point d'entrée
+ENTRYPOINT ["/usr/local/bin/start.sh"]
